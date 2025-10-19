@@ -49,20 +49,6 @@ a{color:inherit}
 .bounce{ animation: bounce 1.6s ease-in-out infinite }
 @keyframes bounce{ 0%,100%{ transform:translateY(0)} 50%{ transform:translateY(-6px)} }
 
-/* intro countdown */
-.intro-countdown{
-  display:inline-flex; gap:10px; align-items:stretch; margin:12px 0 2px;
-  padding:10px; border-radius:14px;
-  background:linear-gradient(180deg, #171629cc, #131224cc); border:1px solid #3b355a;
-  box-shadow:0 10px 30px rgba(0,0,0,.35), inset 0 0 20px #1c1a33;
-}
-.icell{ min-width:78px; padding:8px 10px; border-radius:10px; backdrop-filter: blur(6px);
-  background:linear-gradient(180deg,#23213d,#1a1931);
-  border:1px solid #4b4672; color:#f3eaff; text-align:center;
-}
-.icell .num{font-weight:800; font-size:22px}
-.icell .lbl{font-size:12px; color:#bcb1ff; letter-spacing:.4px}
-
 /* ===== VIDEO WALL BACKGROUND (6 ô — đẹp & gọn) ===== */
 #videoBG{
   position:fixed; inset:0; z-index:0; pointer-events:none;
@@ -233,16 +219,9 @@ section{padding:50px 0}
 <div id="intro" role="dialog" aria-modal="true" aria-label="Màn mở đầu đêm sao">
   <canvas id="introCanvas"></canvas>
   <div class="intro-content">
-    <h1 class="intro-title">Cho Em — 20/10 dưới bầu trời sao ✨</h1>
-    <div class="intro-countdown" aria-label="Đếm ngược tới 20/10">
-      <div class="icell"><div class="num" id="dd">--</div><div class="lbl">Ngày</div></div>
-      <div class="icell"><div class="num" id="hh">--</div><div class="lbl">Giờ</div></div>
-      <div class="icell"><div class="num" id="mm">--</div><div class="lbl">Phút</div></div>
-      <div class="icell"><div class="num" id="ss">--</div><div class="lbl">Giây</div></div>
-    </div>
-    <p class="intro-sub">Nhấn “Bắt đầu” để mở nhạc và bước vào vùng ký ức của hai ta.</p>
+    <h1 class="intro-title">Cho Em  — 20/10 Một bầu trời sao ✨</h1>
+    <p class="intro-sub">Nhấn “Bắt đầu” để bước vào vùng ký ức của hai ta.</p>
     <button id="btnEnter" class="pill bounce">▶️ Bắt đầu</button>
-    <div><button id="btnMuteHint" class="pill ghost">Nếu không nghe nhạc, hãy bật âm thanh 🔊</button></div>
   </div>
 </div>
 
@@ -491,7 +470,7 @@ const DPR = isiOS ? 1.5 : Math.min(window.devicePixelRatio || 1, 2);
   function drawHeart(){
     beatT += 0.06;
     const beat = 1 + Math.sin(beatT)*0.06;
-    const scale = Math.min(W,H)*0.038*beat;
+    const scale = Math.min(W,H)*0.035*beat;
     const cx = W/2, cy = H/2 - 10*DPR;
     const dots = 420;
     for (let i=0;i<dots;i++){
