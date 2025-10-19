@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>20/10 — Dành tặng Em</title>
 <meta name="description" content="Một trang web nhỏ dành tặng em nhân ngày 20/10." />
 <meta name="theme-color" content="#ff7aa2" />
@@ -11,8 +11,8 @@
 <style>
 :root{
   --bg:#0a0a13;
-  --txt:#f7f3ff;
-  --muted:#c9b9d3;
+  --txt:#ff7aa2;          /* chữ đậm để nổi trên video */
+  --muted:#ff7aa2;
   --primary:#ff7aa2;
   --accent:#ffd96a;
   --card:#ffffffcc;
@@ -22,10 +22,10 @@
 *{box-sizing:border-box}
 html,body{height:100%}
 body{
-  margin:0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Thay đổi font thành Segoe UI để hiện đại hơn */
-  color:#ff7aa2; /* Thay đổi màu chữ thành hồng để phù hợp với chủ đề 20/10 */
+  margin:0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color:var(--txt);
   background:#fff8fb; line-height:1.6; overflow-x:hidden;
-  text-shadow: 0 1px 2px rgba(255,255,255,0.5); /* Thêm shadow nhẹ để chữ nổi bật trên nền video */
+  padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right);
 }
 a{color:inherit}
 .container{width:min(1100px, 92vw); margin:0 auto;}
@@ -43,12 +43,13 @@ a{color:inherit}
 .pill{
   display:inline-flex; align-items:center; gap:.5rem; padding:10px 16px; border-radius:999px;
   background:var(--primary); color:#fff; border:none; box-shadow:0 10px 25px rgba(255,122,162,.35); cursor:pointer; font-weight:700;
+  min-height:44px;
 }
 .pill.ghost{ background:transparent; color:#ffdfe9; border:1px solid #ffb9cf }
 .bounce{ animation: bounce 1.6s ease-in-out infinite }
 @keyframes bounce{ 0%,100%{ transform:translateY(0)} 50%{ transform:translateY(-6px)} }
 
-/* intro countdown (đặt trong intro) */
+/* intro countdown */
 .intro-countdown{
   display:inline-flex; gap:10px; align-items:stretch; margin:12px 0 2px;
   padding:10px; border-radius:14px;
@@ -62,7 +63,6 @@ a{color:inherit}
 .icell .num{font-weight:800; font-size:22px}
 .icell .lbl{font-size:12px; color:#bcb1ff; letter-spacing:.4px}
 
-/* ===== VIDEO WALL BACKGROUND (hiện sau khi bắt đầu) ===== */
 /* ===== VIDEO WALL BACKGROUND (6 ô — đẹp & gọn) ===== */
 #videoBG{
   position:fixed; inset:0; z-index:0; pointer-events:none;
@@ -76,8 +76,6 @@ a{color:inherit}
   gap:10px;
   padding:10px;
 }
-
-/* mobile/tablet: 2 cột × 3 hàng */
 @media (max-width: 900px){
   #videoBG{
     grid-template-areas:
@@ -90,22 +88,18 @@ a{color:inherit}
     padding:8px;
   }
 }
-
-/* scrim phủ toàn bộ để chữ dễ đọc */
 #videoBG::after{
   content:"";
   position:absolute; inset:0; z-index:2;
   background:
-    radial-gradient(1200px 800px at 70% 15%, rgba(10,8,20,.10) 0%, rgba(10,8,20,0) 60%),
-    linear-gradient(180deg, rgba(10,8,20,.28), rgba(10,8,20,.38));
-  backdrop-filter: blur(1.2px);
+    radial-gradient(1200px 800px at 70% 15%, rgba(10,8,20,.12) 0%, rgba(10,8,20,0) 60%),
+    linear-gradient(180deg, rgba(10,8,20,.32), rgba(10,8,20,.44));
+  backdrop-filter: blur(1.4px);
 }
-
-/* từng ô video */
 .vcell{
-  position:relative; overflow:hidden; border-radius:14px; z-index:1;
+  position:relative; overflow:hidden; border-radius:16px; z-index:1;
   outline:1px solid rgba(255,255,255,.06);
-  box-shadow: 0 10px 30px rgba(0,0,0,.18) inset;
+  box-shadow: 0 1px 0 rgba(255,255,255,.2) inset, 0 10px 22px rgba(0,0,0,.15);
 }
 .vcell[data-area="a"]{ grid-area:a }
 .vcell[data-area="b"]{ grid-area:b }
@@ -113,33 +107,19 @@ a{color:inherit}
 .vcell[data-area="d"]{ grid-area:d }
 .vcell[data-area="e"]{ grid-area:e }
 .vcell[data-area="f"]{ grid-area:f }
-
-/* video bên trong ô */
 .vcell video{
   position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
   filter:saturate(1.07) contrast(1.05) brightness(.9);
   opacity:0; animation: fadeIn .9s ease forwards;
-  transform: scale(1.04); /* base để ken-burns mượt */
+  transform: scale(1.04);
 }
-
-/* object-position & pan khác nhau cho từng ô để tránh lặp cảm giác */
-.vcell.a video{ object-position: 50% 40%; animation-name: fadeIn, panTR; }
-.vcell.b video{ object-position: 30% 50%; animation-name: fadeIn, panBL; }
-.vcell.c video{ object-position: 70% 50%; animation-name: fadeIn, panTB; }
-.vcell.d video{ object-position: 50% 60%; animation-name: fadeIn, panLR; }
-.vcell.e video{ object-position: 40% 50%; animation-name: fadeIn, panBR; }
-.vcell.f video{ object-position: 60% 45%; animation-name: fadeIn, panTL; }
-
-/* tốc độ ken-burns khác nhau nhẹ */
-.vcell.a video{ animation-duration: .9s, 28s; }
-.vcell.b video{ animation-duration: .9s, 30s; }
-.vcell.c video{ animation-duration: .9s, 26s; }
-.vcell.d video{ animation-duration: .9s, 32s; }
-.vcell.e video{ animation-duration: .9s, 29s; }
-.vcell.f video{ animation-duration: .9s, 31s; }
+.vcell.a video{ object-position: 50% 40%; animation-name: fadeIn, panTR; animation-duration: .9s, 28s; }
+.vcell.b video{ object-position: 30% 50%; animation-name: fadeIn, panBL; animation-duration: .9s, 30s; }
+.vcell.c video{ object-position: 70% 50%; animation-name: fadeIn, panTB; animation-duration: .9s, 26s; }
+.vcell.d video{ object-position: 50% 60%; animation-name: fadeIn, panLR; animation-duration: .9s, 32s; }
+.vcell.e video{ object-position: 40% 50%; animation-name: fadeIn, panBR; animation-duration: .9s, 29s; }
+.vcell.f video{ object-position: 60% 45%; animation-name: fadeIn, panTL; animation-duration: .9s, 31s; }
 .vcell video{ animation-timing-function: ease, linear; }
-
-/* fade-in + 6 hướng pan siêu nhẹ (không gây chóng mặt) */
 @keyframes fadeIn{ from{opacity:0} to{opacity:1} }
 @keyframes panTR{ from{transform:scale(1.04) translate(-1.5%, 1.5%)} to{transform:scale(1.08) translate(1.5%, -1.5%)} }
 @keyframes panBL{ from{transform:scale(1.04) translate(1.2%, -1.2%)} to{transform:scale(1.08) translate(-1.2%, 1.2%)} }
@@ -148,28 +128,37 @@ a{color:inherit}
 @keyframes panBR{ from{transform:scale(1.04) translate(1.2%, 1.2%)} to{transform:scale(1.08) translate(-1.2%, -1.2%)} }
 @keyframes panTL{ from{transform:scale(1.04) translate(-1.2%, -1.2%)} to{transform:scale(1.08) translate(1.2%, 1.2%)} }
 
-
 /* ===== CONTENT ===== */
 main{ position:relative; z-index:2; }
-.hero{ padding:80px 0 60px; text-align:center; }
-.hero h1{ font-size: clamp(28px, 4vw + 10px, 54px); line-height:1.08; margin:0 0 12px; letter-spacing:.2px; color:#ff7aa2 }
-.hero .subtitle{color:#ff7aa2; margin-bottom:22px}
-.hero-card{ margin:22px auto 0; padding:24px; border-radius: var(--radius);
-  background: linear-gradient(180deg, #fff, #fff7fa); box-shadow: var(--shadow); display:inline-block; }
+.hero{ padding:56px 0 40px; text-align:center; }
+.hero h1{ font-size: clamp(22px, 6.2vw, 32px); line-height:1.12; margin:0 0 12px; letter-spacing:.2px; color:#ff7aa2; text-shadow: 0 1px 0 rgba(255,255,255,.5); }
+.hero .subtitle{color:var(--muted); margin-bottom:22px}
+.hero-card{ margin:22px auto 0; padding:20px; border-radius: 14px;
+  background: linear-gradient(180deg, #fff, #fff7fa); box-shadow: 0 8px 18px rgba(0,0,0,.08); display:inline-block; }
 
-/* (đã bỏ đồng hồ đếm ngược khỏi hero theo yêu cầu) */
+section{padding:50px 0}
+.sec-title{ font-size: clamp(18px, 5.2vw, 26px); margin:0 0 18px; color:#ff7aa2 }
+.lead{color:var(--muted); margin-top:-6px; margin-bottom:18px}
+.card{ background:#ffffffcc; border:1px solid #ffe0ec; border-radius:14px; padding:16px 18px; box-shadow:0 8px 18px rgba(0,0,0,.08) }
 
-section{padding:60px 0}
-.sec-title{ font-size: clamp(22px, 2vw + 14px, 34px); margin:0 0 18px; color:#ff7aa2 }
-.lead{color:#ff7aa2; margin-top:-6px; margin-bottom:18px}
-.card{ background:#ffffffcc; border:1px solid #ffe0ec; border-radius:var(--radius); padding:16px 18px; box-shadow:var(--shadow); }
-
-/* Traits */
+/* Traits (tilt) */
 .traits{ display:grid; gap:16px; grid-template-columns: repeat(auto-fit, minmax(210px,1fr)); }
-.trait{ background:#fff; border:1px solid #ffd9e7; border-radius:16px; padding:16px; box-shadow: var(--shadow); transform: perspective(700px) rotateX(0) rotateY(0); transition: transform .12s ease, box-shadow .2s ease; }
+.trait{
+  position:relative; background:#fff; border:1px solid #ffd9e7; border-radius:16px; padding:16px;
+  box-shadow: var(--shadow); transform: perspective(700px) rotateX(0) rotateY(0); transition: transform .12s ease, box-shadow .2s ease;
+  will-change: transform; transform-style: preserve-3d;
+}
 .trait:hover{ box-shadow:0 16px 50px rgba(255,122,162,.35) }
 .trait h3{margin:0 0 6px; font-size:18px}
-.trait p{margin:0; color:#ff7aa2; font-size:14px}
+.trait p{margin:0; color:var(--muted); font-size:14px}
+.trait::after{
+  content:"";
+  position:absolute; inset:0; border-radius:16px; pointer-events:none;
+  background: radial-gradient(600px 300px at var(--lx,50%) var(--ly,50%),
+              rgba(255,255,255,.35), rgba(255,255,255,0) 60%);
+  opacity:.0; transition: opacity .2s ease;
+}
+.trait:hover::after{ opacity:.55; }
 
 /* Timeline */
 .timeline{position:relative}
@@ -211,10 +200,10 @@ section{padding:60px 0}
 .toast.show{ opacity:1; transform:translateX(-50%) translateY(0) }
 
 /* Gallery */
-.gallery{columns:1; column-gap:16px}
+.gallery{columns:1; column-gap:12px}
 @media (min-width:700px){.gallery{columns:2}}
 @media (min-width:1000px){.gallery{columns:3}}
-.gallery img{ width:100%; border-radius:14px; margin:0 0 16px; display:block; border:1px solid #ffe1ed; box-shadow:var(--shadow); transition:transform .25s ease, box-shadow .25s ease; }
+.gallery img{ width:100%; border-radius:12px; margin:0 0 12px; display:block; border:1px solid #ffe1ed; box-shadow:var(--shadow); transition:transform .25s ease, box-shadow .25s ease; }
 .gallery img:hover{transform:translateY(-4px) scale(1.01); box-shadow:0 16px 40px rgba(255,122,162,.35)}
 
 /* Modal */
@@ -225,34 +214,17 @@ section{padding:60px 0}
 .modal .row{display:flex; gap:10px; flex-wrap:wrap; justify-content:center}
 .modal .row .pill{background:#222; color:#fff;}
 
-footer{padding:40px 0 80px; text-align:center; color:#7a4b62}
-.sign{font-weight:800; color:#ff7aa2}
+/* Hearts Canvas */
 #hearts{
-  position:fixed;
-  inset:0;
-  z-index:5;          /* trên video, dưới nội dung */
-  pointer-events:none;/* <<< quan trọng: không chặn click */
+  position:fixed; inset:0; z-index:5; pointer-events:none;
 }
-/* Tilt mượt & nổi khối */
-.trait{
-  will-change: transform;
-  transform-style: preserve-3d;
-}
-.trait::after{
-  content:"";
-  position:absolute; inset:0; border-radius:16px; pointer-events:none;
-  background: radial-gradient(600px 300px at var(--lx,50%) var(--ly,50%),
-              rgba(255,255,255,.35), rgba(255,255,255,0) 60%);
-  opacity:.0; transition: opacity .2s ease;
-}
-.trait:hover::after{ opacity:.55; }
 
+/* Accessibility */
 @media (prefers-reduced-motion: reduce){
+  .track{ animation: none }
   .trait{ transform:none !important }
   .trait::after{ display:none }
 }
-
-@media (prefers-reduced-motion: reduce){ .track{ animation: none } }
 </style>
 </head>
 <body>
@@ -262,7 +234,6 @@ footer{padding:40px 0 80px; text-align:center; color:#7a4b62}
   <canvas id="introCanvas"></canvas>
   <div class="intro-content">
     <h1 class="intro-title">Cho Em — 20/10 dưới bầu trời sao ✨</h1>
-    <!-- COUNTDOWN moved into intro -->
     <div class="intro-countdown" aria-label="Đếm ngược tới 20/10">
       <div class="icell"><div class="num" id="dd">--</div><div class="lbl">Ngày</div></div>
       <div class="icell"><div class="num" id="hh">--</div><div class="lbl">Giờ</div></div>
@@ -275,14 +246,13 @@ footer{padding:40px 0 80px; text-align:center; color:#7a4b62}
   </div>
 </div>
 
-<!-- Video mosaic background (revealed after start) -->
+<!-- Video mosaic background -->
 <div id="videoBG" aria-hidden="true"></div>
 
-<!-- Hearts (foreground particles) -->
+<!-- Hearts -->
 <canvas id="hearts" aria-hidden="true"></canvas>
 
 <main aria-live="polite">
-  <!-- HERO (không còn countdown ở đây) -->
   <section class="hero">
     <div class="container">
       <h1>Gửi Em — người con gái đặc biệt nhất ngày <span style="color:#ff7aa2">20/10</span> 💐</h1>
@@ -302,7 +272,7 @@ footer{padding:40px 0 80px; text-align:center; color:#7a4b62}
         <div class="trait"><h3>🌞 Nụ cười</h3><p>Làm anh vui mỗi khi thấy em.</p></div>
         <div class="trait"><h3>🧠 Thông minh</h3><p>Nói ít nhưng trúng trọng tâm.</p></div>
         <div class="trait"><h3>💪 Kiên định</h3><p>Đi đến cùng điều Em chọn.</p></div>
-        <div class="trait"><h3>🎨 Gu riêng</h3><p>Đồ Em chọn — luôn xịn trừ đồ ăn .</p></div>
+        <div class="trait"><h3>🎨 Gu riêng</h3><p>Đồ Em chọn — luôn xịn trừ đồ ăn.</p></div>
         <div class="trait"><h3>🤍 Thể thao</h3><p>Thích thể thao.</p></div>
         <div class="trait"><h3>🌿 Điềm tĩnh</h3><p>Cho anh cảm giác an yên.</p></div>
       </div>
@@ -328,7 +298,7 @@ footer{padding:40px 0 80px; text-align:center; color:#7a4b62}
         <div class="tl-item">
           <span class="tag">03/08/2025 - Chuyến đi chơi xa đầu tiên</span>
           <h3>Biển xanh & Tiếng cười & Núi cao & Đồ ăn ngon</h3>
-          <p>Có em phái sau xe , cùng anh leo núi . cùng anh gặp <b> Xu </b>, Cùng anh ăn ngon.</p>
+          <p>Có em phía sau xe, cùng anh leo núi, gặp <b>Xu</b>, và ăn ngon.</p>
         </div>
         <div class="tl-item">
           <span class="tag">Hôm nay</span>
@@ -347,7 +317,7 @@ footer{padding:40px 0 80px; text-align:center; color:#7a4b62}
         <div id="typewriter" class="typewriter" aria-live="polite"></div>
         <div id="fullLetter" class="hidden mt-12">
           Ý yêu, <br>
-          Cảm ơn Em vì đã kiên nhẫn, dịu dàng và luôn tin ở anh, bên cạnh anh mọi lúc mọi khoảng khắc. Anh hứa sẽ chăm chỉ hơn, lắng nghe nhiều hơn, và cùng Em đi qua mọi bình minh lẫn giông gió , cùng em trải qua kỷ niệm thời sinh viên. Chúc Em 20/10 rạng rỡ — như chính Em. <br>
+          Cảm ơn Em vì đã kiên nhẫn, dịu dàng và luôn tin ở anh. Anh hứa sẽ chăm chỉ hơn, lắng nghe nhiều hơn, và cùng Em đi qua mọi bình minh lẫn giông gió, cùng trải qua kỷ niệm thời sinh viên và sau này. Chúc Em 20/10 rạng rỡ — như chính Em. <br>
           <strong>Thương Em nhiều - Ý yêu của anh! 💞</strong>
         </div>
         <div class="actions">
@@ -358,22 +328,22 @@ footer{padding:40px 0 80px; text-align:center; color:#7a4b62}
     </div>
   </section>
 
-  <!-- Kỷ niệm dạng Carousel tự chạy -->
+  <!-- Carousel -->
   <section>
     <div class="container">
       <h2 class="sec-title">Kỷ niệm trôi êm</h2>
       <p class="lead">Ảnh sẽ tự lướt nhẹ, như những ngày bình yên mình bên nhau.</p>
       <div class="carousel" id="carousel">
         <div class="track" id="track">
-          <img src="assets/anh1.jpg" alt="Kỷ niệm 1">
-          <img src="assets/anh2.jpg" alt="Kỷ niệm 2">
-          <img src="assets/anh3.jpg" alt="Kỷ niệm 3">
-          <img src="assets/anh4.jpg" alt="Kỷ niệm 4">
-          <img src="assets/anh5.jpg" alt="Kỷ niệm 1 copy">
-          <img src="assets/anh6.jpg" alt="Kỷ niệm 2 copy">
-          <img src="assets/anh7.jpg" alt="Kỷ niệm 3 copy">
-          <img src="assets/anh8.jpg" alt="Kỷ niệm 4 copy">
-          <img src="assets/anh9.jpg" alt="Kỷ niệm 4 copy">
+          <img src="assets/anh1.jpg" alt="Kỷ niệm 1" loading="lazy" decoding="async">
+          <img src="assets/anh2.jpg" alt="Kỷ niệm 2" loading="lazy" decoding="async">
+          <img src="assets/anh3.jpg" alt="Kỷ niệm 3" loading="lazy" decoding="async">
+          <img src="assets/anh4.jpg" alt="Kỷ niệm 4" loading="lazy" decoding="async">
+          <img src="assets/anh5.jpg" alt="Kỷ niệm 5" loading="lazy" decoding="async">
+          <img src="assets/anh6.jpg" alt="Kỷ niệm 6" loading="lazy" decoding="async">
+          <img src="assets/anh7.jpg" alt="Kỷ niệm 7" loading="lazy" decoding="async">
+          <img src="assets/anh8.jpg" alt="Kỷ niệm 8" loading="lazy" decoding="async">
+          <img src="assets/anh9.jpg" alt="Kỷ niệm 9" loading="lazy" decoding="async">
         </div>
         <div class="hint">Tự chạy • chạm để dừng</div>
       </div>
@@ -384,7 +354,7 @@ footer{padding:40px 0 80px; text-align:center; color:#7a4b62}
   <section>
     <div class="container">
       <h2 class="sec-title">Mini-quiz “Bắt bài Anh Nào” 😁</h2>
-      <p class="lead">Điều gì ở em Ý mà anh thích nhất? </p>
+      <p class="lead">Điều gì ở em Ý mà anh thích nhất?</p>
       <div class="quiz" id="quiz">
         <div class="opt">A. Nụ cười</div>
         <div class="opt">B. Ánh mắt</div>
@@ -401,11 +371,11 @@ footer{padding:40px 0 80px; text-align:center; color:#7a4b62}
       <h2 class="sec-title">Hẹn hò kế tiếp 🌙</h2>
       <p class="lead">Em chọn nhé, anh sẽ lên lịch dẫn cục dàng đi:</p>
       <div class="chips" id="chips">
-        <span class="chip">❤️ Phim + jollibee (như ngày đầu 🤭) </span>
-        <span class="chip">🍣 Dokki</span>
-        <span class="chip">🌳 Đi thảo cầm viên</span>
-        <span class="chip">🎨 Đi chụp ảnh</span>
-        <span class="chip">☕ Cà phê chill chill</span>
+        <span class="chip">❤️ Phim + Jollibee (như ngày đầu 🤭)</span>
+        <span class="chip">🍜 Dokki</span>
+        <span class="chip">🌳 Thảo Cầm Viên</span>
+        <span class="chip">📷 Đi chụp ảnh</span>
+        <span class="chip">☕ Cà phê chill</span>
         <span class="chip">🎵 Về nhà cùng anh thư giãn</span>
       </div>
     </div>
@@ -416,12 +386,12 @@ footer{padding:40px 0 80px; text-align:center; color:#7a4b62}
     <div class="container">
       <h2 class="sec-title">Album nhỏ của chúng mình</h2>
       <div class="gallery" aria-label="Bộ sưu tập ảnh">
-        <img src="/assets/anh2.jpg" alt="Kỷ niệm 1">
-        <img src="/assets/anh3.jpg" alt="Kỷ niệm 2">
-        <img src="/assets/anh9.jpg" alt="Kỷ niệm 3">
-        <img src="/assets/anh4.jpg" alt="Kỷ niệm 4">
-        <img src="/assets/anh6.jpg" alt="Kỷ niệm 5">
-        <img src="/assets/anh7.jpg" alt="Kỷ niệm 6">
+        <img src="assets/anh2.jpg" alt="Kỷ niệm 1" loading="lazy" decoding="async">
+        <img src="assets/anh3.jpg" alt="Kỷ niệm 2" loading="lazy" decoding="async">
+        <img src="assets/anh9.jpg" alt="Kỷ niệm 3" loading="lazy" decoding="async">
+        <img src="assets/anh4.jpg" alt="Kỷ niệm 4" loading="lazy" decoding="async">
+        <img src="assets/anh6.jpg" alt="Kỷ niệm 5" loading="lazy" decoding="async">
+        <img src="assets/anh7.jpg" alt="Kỷ niệm 6" loading="lazy" decoding="async">
       </div>
     </div>
   </section>
@@ -439,14 +409,13 @@ footer{padding:40px 0 80px; text-align:center; color:#7a4b62}
   </section>
 </main>
 
-<!-- MODAL (bổ sung) -->
+<!-- MODAL -->
 <div id="backdrop" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="giftTitle" aria-describedby="giftDesc" style="display:none">
   <div class="modal">
     <h3 id="giftTitle">Voucher ôm + hôn + trà sữa</h3>
-    <p id="giftDesc">Quét QR để nhận quyền lợi: 999 nụ hôn và 1 ly trà sữa , 1 phần quà bất kỳ 🥤💋</p>
+    <p id="giftDesc">Quét QR để nhận quyền lợi: 999 nụ hôn, 1 ly trà sữa & 1 phần quà bất kỳ 🥤💋</p>
     <div class="qr" style="padding:0; border:none">
-      <!-- thay ảnh QR thật của bạn -->
-      <img src="assets/qr.png" alt="QR Gift" style="width:220px;height:220px;border-radius:12px;display:block;">
+      <img src="assets/qr.png" alt="Choa anh iu  nợ nhá mai làm bù hehe" style="width:220px;height:220px;border-radius:12px;display:block;">
     </div>
     <div class="row">
       <button class="pill" id="btnConfetti">Bắn pháo tim</button>
@@ -457,7 +426,7 @@ footer{padding:40px 0 80px; text-align:center; color:#7a4b62}
 
 <footer>
   <div class="container">
-    <p>Trang này được làm riêng cho <span class="sign">Em</span>. Cảm ơn vì đã đến bên anh. 🌙</p>
+    <p>Trang này được làm riêng cho <span class="sign" style="color:#ff7aa2;font-weight:800">Em</span>. Cảm ơn vì đã đến bên anh. 🌙</p>
     <p class="mt-8">P/S: Nhấn đôi vào nền để tim bay nhiều hơn nha 💘</p>
   </div>
 </footer>
@@ -469,67 +438,60 @@ footer{padding:40px 0 80px; text-align:center; color:#7a4b62}
 
 <div class="toast" id="toast">Đã lưu lịch hẹn 💌</div>
 
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
 <script>
 /* ===== Helpers & DPR ===== */
 const $ = (sel, scope=document) => scope.querySelector(sel);
-const DPR = Math.min(window.devicePixelRatio || 1, 2);
+const isiOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+const DPR = isiOS ? 1.5 : Math.min(window.devicePixelRatio || 1, 2);
 
-/* ===== INTRO: Night sky + beating star heart (heart nhỏ hơn, sao đậm hơn) ===== */
+/* ===== INTRO: Night sky + beating star heart ===== */
 (() => {
   const cvs = $("#introCanvas");
   const ctx = cvs.getContext("2d");
   let W=0, H=0, stars=[];
-  const STAR_N = 240; // hơi dày hơn 1 chút
   function resize(){
     W = cvs.width = Math.floor(innerWidth * DPR);
     H = cvs.height = Math.floor(innerHeight * DPR);
   }
   addEventListener("resize", resize, {passive:true}); resize();
-
+  const STAR_N = (innerWidth <= 430) ? 160 : 240;
   function initStars(){
     stars = Array.from({length:STAR_N}, () => ({
-      x: Math.random()*W,
-      y: Math.random()*H,
-      r: (Math.random()*2.0 + 0.8)*DPR,   // to hơn nhẹ
-      a0: Math.random()*0.35 + 0.55,      // sáng (đậm) hơn: 0.55–0.90
+      x: Math.random()*W, y: Math.random()*H,
+      r: (Math.random()*2.0 + 0.8)*DPR,
+      a0: Math.random()*0.35 + 0.55,
       t: Math.random()*Math.PI*2,
       tw: 0.012 + Math.random()*0.02
     }));
   }
   initStars();
-
   function drawStarfield(){
-    // additive blending giúp sao “đậm” hơn khi chồng sáng
-    ctx.save();
-    ctx.globalCompositeOperation = "lighter";
+    ctx.save(); ctx.globalCompositeOperation = "lighter";
     for(const s of stars){
       s.t += s.tw;
       const a = Math.min(1, s.a0 + Math.sin(s.t)*0.25);
-      // lõi trắng + viền hồng tím mờ
       const grd = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, s.r*2.2);
       grd.addColorStop(0, `rgba(255,255,255,${a})`);
       grd.addColorStop(1, `rgba(210,170,255,${a*0.25})`);
       ctx.fillStyle = grd;
       ctx.beginPath(); ctx.arc(s.x, s.y, s.r*2.2, 0, Math.PI*2); ctx.fill();
-
-      // drift nhẹ
       s.x += 0.02*DPR; s.y += 0.01*DPR;
       if (s.x>W+12) s.x=-12; if (s.y>H+12) s.y=-12;
     }
     ctx.restore();
   }
-
-  // Trái tim sao — thu nhỏ ~25–30%
   function heartPoint(t){
     const x = 16*Math.pow(Math.sin(t),3);
     const y = 13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t);
     return {x, y};
   }
-  let beatT = 0;
+  let beatT = 0, last=performance.now();
   function drawHeart(){
     beatT += 0.06;
     const beat = 1 + Math.sin(beatT)*0.06;
-    const scale = Math.min(W,H)*0.038*beat; // ↓ nhỏ hơn so với 0.05
+    const scale = Math.min(W,H)*0.038*beat;
     const cx = W/2, cy = H/2 - 10*DPR;
     const dots = 420;
     for (let i=0;i<dots;i++){
@@ -547,37 +509,40 @@ const DPR = Math.min(window.devicePixelRatio || 1, 2);
     rad.addColorStop(1, "rgba(10,10,19,0)");
     ctx.fillStyle = rad; ctx.beginPath(); ctx.arc(cx, cy, scale*3.8, 0, Math.PI*2); ctx.fill();
   }
-
-  let last=performance.now();
   function loop(now=performance.now()){
-    last=now;
-    // nền đêm
+    if (now - last < 22) { requestAnimationFrame(loop); return; } // ~45fps iOS
+    last = now;
     const g = ctx.createLinearGradient(0,0,0,H);
     g.addColorStop(0, "#0d0b18"); g.addColorStop(1, "#141326");
     ctx.fillStyle = g; ctx.fillRect(0,0,W,H);
-    drawStarfield();
-    drawHeart();
+    drawStarfield(); drawHeart();
     requestAnimationFrame(loop);
   }
   requestAnimationFrame(loop);
 })();
 
-/* ===== Build video background AFTER Start ===== */
+/* ===== Danh sách video nền (đặt file mp4 vào assets/) ===== */
 const videoFiles = [
-  // TODO: thay bằng video thực trong assets/
   "assets/video1.mp4",
   "assets/video2.mp4",
   "assets/video3.mp4",
   "assets/video4.mp4",
-  "assets/video5.mp4"
+  "assets/video5.mp4",
+  "assets/video6.mp4"   // thêm video6 để đủ 6 ô
 ];
+
+/* ===== Build video background AFTER Start (robust cho iOS) ===== */
+function safePlay(video, tries=3){
+  const attempt = () => video.play().catch(err=>{
+    if (tries>0) setTimeout(()=>attempt(--tries), 150);
+  });
+  attempt();
+}
 function buildVideoWall(){
   const wrap = $("#videoBG");
   wrap.innerHTML = "";
-
-  // đảm bảo đúng 6 ô theo khu vực a..f
   const areas = ["a","b","c","d","e","f"];
-  const files = videoFiles.slice(0,6); // lấy 6 file đầu (hoặc ít hơn)
+  const files = videoFiles.length >= 6 ? videoFiles.slice(0,6) : [...videoFiles, ...videoFiles].slice(0,6);
 
   areas.forEach((area, i) => {
     const cell = document.createElement("div");
@@ -586,33 +551,53 @@ function buildVideoWall(){
 
     const v = document.createElement("video");
     v.setAttribute("playsinline","");
+    v.setAttribute("webkit-playsinline","");
+    v.setAttribute("muted","");            // attr + prop để iOS chắc chắn mute
     v.muted = true;
     v.loop = true;
     v.autoplay = true;
-    v.src = files[i % files.length];
+    v.preload = "metadata";
+    v.disableRemotePlayback = true;
 
-    // stagger fade-in để “lần lượt xuất hiện”
+    // Stagger attach src & animation để giảm tải giải mã đồng thời
     v.style.animationDelay = `${0.08 * i}s, 0s`;
+    const src = files[i % files.length];
 
-    // random seek nhẹ để khung hình khác nhau
-    v.addEventListener("loadedmetadata", ()=>{
+    const onMeta = ()=>{
       try{
         const dur = Math.max(0, (v.duration || 12) - 1);
         v.currentTime = Math.random() * dur;
       }catch{}
-      v.play().catch(()=>{});
-    });
+      safePlay(v, 4);
+    };
+    const onError = ()=>{
+      // fallback: gán lại src hoặc dùng 1 video khác để tránh 1 ô chết
+      v.removeAttribute('src');
+      v.load();
+      v.src = files[(i+1) % files.length];
+      v.addEventListener('loadedmetadata', onMeta, {once:true});
+      v.addEventListener('error', ()=>safePlay(v,2), {once:true});
+      v.load();
+    };
+
+    // Trì hoãn 2 ô cuối để tránh burst
+    const delayAttach = i >= 4 ? 300 : 0;
+    setTimeout(()=>{
+      v.src = src;
+      v.addEventListener('loadedmetadata', onMeta, {once:true});
+      v.addEventListener('error', onError, {once:true});
+      // Một số iOS cần chạm người dùng rồi mới play — đã có nút Start
+      v.load();
+    }, delayAttach);
 
     cell.appendChild(v);
     wrap.appendChild(cell);
   });
 
-  // hiển thị
   wrap.style.opacity = "1";
 }
 
-
-/* ===== Countdown (IDs đã chuyển vào intro) ===== */
+/* ===== Countdown (IDs ở intro) ===== */
 (function setupCountdown(){
   const dd = $("#dd"), hh = $("#hh"), mm = $("#mm"), ss = $("#ss");
   function next2010(now = new Date()){
@@ -621,9 +606,7 @@ function buildVideoWall(){
     return (now <= targetThisYear) ? targetThisYear : new Date(y+1, 9, 20, 0, 0, 0);
   }
   function tick(){
-    const now = new Date();
-    const tgt = next2010(now);
-    const diff = tgt - now;
+    const now = new Date(); const tgt = next2010(now); const diff = tgt - now;
     if (diff <= 0){
       const el = document.querySelector(".intro-countdown");
       if (el) el.innerHTML = `<div class="icell"><div class="num">🎉</div><div class="lbl">Chúc mừng</div></div>`;
@@ -646,7 +629,7 @@ const lines = [
   "Em là điều dịu êm giữa cuộc sống vội vàng,",
   "là bình yên anh muốn quay về sau mỗi ngày dài,",
   "là nguồn cảm hứng động lực để anh tốt hơn từng chút một.",
-  "Chúc Em 20/10 rực rỡ — anh luôn ở đây Với Em."
+  "Chúc Em 20/10 rực rỡ — anh luôn ở đây với Em."
 ];
 (function typewriter(){
   const box = $("#typewriter");
@@ -666,19 +649,14 @@ $("#btnReveal")?.addEventListener("click", ()=> $("#fullLetter").classList.remov
 /* ===== Audio + Start ===== */
 const audio = $("#bgm");
 $("#btnEnter").addEventListener("click", async ()=>{
-  // 1) Fade out intro
   const intro = $("#intro");
   intro.style.transition = "opacity .8s ease";
   intro.style.opacity = "0";
   setTimeout(()=>{ intro.style.display = "none"; }, 820);
 
-  // 2) Build & show video wall
   buildVideoWall();
 
-  // 3) Play music
   try{ await audio.play(); }catch(e){}
-
-  // 4) chút tim bay
   pulseHearts(18);
 });
 $("#btnMuteHint").addEventListener("click", ()=> alert("Nếu không nghe thấy, hãy bật volume thiết bị và bỏ chế độ im lặng (iOS)."));
@@ -688,6 +666,15 @@ const backdrop = $("#backdrop");
 $("#btnGift")?.addEventListener("click", ()=> backdrop.style.display="flex");
 $("#btnClose")?.addEventListener("click", ()=> backdrop.style.display="none");
 backdrop?.addEventListener("click", (e)=>{ if(e.target===backdrop) backdrop.style.display="none"; });
+
+/* ===== Confetti ===== */
+$("#btnConfetti")?.addEventListener("click", ()=>{
+  confetti({
+    particleCount: 100,
+    spread: 70,
+    origin: { y: 0.6 }
+  });
+});
 
 /* ===== Hearts Particles ===== */
 const cvsHearts = $("#hearts");
@@ -729,6 +716,7 @@ function pulseHearts(n=14){
 let lastHearts = performance.now();
 function loopHearts(now = performance.now()){
   if (!heartsRunning) return;
+  if (now - lastHearts < 22) { requestAnimationFrame(loopHearts); return; } // ~45fps
   lastHearts = now;
   ctxHearts.clearRect(0,0,HW,HH);
   for (let p of heartParticles){
@@ -759,7 +747,7 @@ if (quiz){
   opts.forEach((el, idx)=>{
     el.addEventListener('click', ()=>{
       opts.forEach(o=>o.classList.remove('correct','wrong'));
-      if (idx === 3){ el.classList.add('correct'); quizResult.textContent = "Chuẩn! Thực ra anh Thích tất tần tật về Em. 🥰"; pulseHearts(18); }
+      if (idx === 3){ el.classList.add('correct'); quizResult.textContent = "Chuẩn! Thực ra anh thích tất tần tật về Em. 🥰"; pulseHearts(18); }
       else { el.classList.add('wrong'); quizResult.textContent = "Cũng đúng… nhưng đáp án chính xác nhất là: TẤT CẢ! 💖"; }
     });
   });
@@ -786,55 +774,42 @@ $("#chips")?.addEventListener('click', (e)=>{
   ['mouseup','mouseleave','touchend','touchcancel'].forEach(ev=>btn.addEventListener(ev, upHandler));
 })();
 
-/* ===== Pause loops when tab hidden ===== */
+/* ===== Tab visibility: tiết kiệm pin & tránh video pause bất ngờ ===== */
 document.addEventListener("visibilitychange", ()=>{
+  const vids = document.querySelectorAll("#videoBG video");
+  if (document.hidden){ vids.forEach(v=>v.pause()); }
+  else { vids.forEach(v=> v.play().catch(()=>{})); }
   heartsRunning = !document.hidden;
-  if (!document.hidden){
-    requestAnimationFrame(loopHearts);
-  }
+  if (!document.hidden) requestAnimationFrame(loopHearts);
 });
 
-// ===== Tilt cards (“Vì sao Em tuyệt?”) =====
+/* ===== Tilt cards ===== */
 (() => {
-  const TILT_X = 6;   // độ nghiêng theo trục X (dọc)
-  const TILT_Y = 8;   // độ nghiêng theo trục Y (ngang)
+  const TILT_X = 6, TILT_Y = 8;
   const cards = document.querySelectorAll('.trait');
   if (!cards.length) return;
-
   cards.forEach(card => {
     let raf = 0;
-
     function setTilt(e, isTouch=false){
       const r = card.getBoundingClientRect();
       const cx = isTouch ? (e.touches?.[0].clientX ?? e.clientX) : e.clientX;
       const cy = isTouch ? (e.touches?.[0].clientY ?? e.clientY) : e.clientY;
-      const x = (cx - r.left) / r.width;   // 0..1
-      const y = (cy - r.top)  / r.height;  // 0..1
-      const rx = (y - 0.5) * -TILT_X;
-      const ry = (x - 0.5) *  TILT_Y;
-
-      // throttle bằng rAF để mượt
+      const x = (cx - r.left) / r.width, y = (cy - r.top)  / r.height;
+      const rx = (y - 0.5) * -TILT_X, ry = (x - 0.5) *  TILT_Y;
       cancelAnimationFrame(raf);
       raf = requestAnimationFrame(() => {
         card.style.transform = `perspective(700px) rotateX(${rx}deg) rotateY(${ry}deg)`;
-        // cập nhật vị trí highlight
         card.style.setProperty('--lx', `${x*100}%`);
         card.style.setProperty('--ly', `${y*100}%`);
       });
     }
-
     function resetTilt(){
       cancelAnimationFrame(raf);
       card.style.transform = 'perspective(700px) rotateX(0) rotateY(0)';
-      card.style.removeProperty('--lx');
-      card.style.removeProperty('--ly');
+      card.style.removeProperty('--lx'); card.style.removeProperty('--ly');
     }
-
-    // Chuột
     card.addEventListener('mousemove', setTilt);
     card.addEventListener('mouseleave', resetTilt);
-
-    // Cảm ứng
     card.addEventListener('touchstart', e => setTilt(e, true), {passive:true});
     card.addEventListener('touchmove',  e => setTilt(e, true), {passive:true});
     card.addEventListener('touchend',   resetTilt, {passive:true});
