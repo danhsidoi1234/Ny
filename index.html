@@ -611,8 +611,12 @@ $("#btnEnter").addEventListener("click", async ()=>{
   try{ await audio.play(); }catch(e){}
   pulseHearts(18);
 });
-$("#btnMuteHint").addEventListener("click", ()=> alert("Nếu không nghe thấy, hãy bật volume thiết bị và bỏ chế độ im lặng (iOS)."));
-
+$("#btnMuteHint")?.addEventListener("click", ()=> alert("Nếu không nghe thấy, hãy bật volume thiết bị và bỏ chế độ im lặng (iOS)."));
+$("#btnGift")?.addEventListener("click", ()=> backdrop.style.display="flex");
+$("#btnClose")?.addEventListener("click", ()=> backdrop.style.display="none");
+$("#btnConfetti")?.addEventListener("click", ()=>{ confetti({particleCount:100, spread:70, origin:{y:0.6}}); });
+$("#btnHearts")?.addEventListener("click", ()=>pulseHearts(24));
+$("#btnReveal")?.addEventListener("click", ()=> $("#fullLetter")?.classList.remove("hidden"));
 /* ===== Modal ===== */
 const backdrop = $("#backdrop");
 $("#btnGift")?.addEventListener("click", ()=> backdrop.style.display="flex");
