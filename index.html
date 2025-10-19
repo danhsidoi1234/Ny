@@ -219,8 +219,8 @@ section{padding:50px 0}
 <div id="intro" role="dialog" aria-modal="true" aria-label="Màn mở đầu đêm sao">
   <canvas id="introCanvas"></canvas>
   <div class="intro-content">
-    <h1 class="intro-title">Cho Em  — 20/10 Một bầu trời sao ✨</h1>
-    <p class="intro-sub">Nhấn “Bắt đầu” để bước vào vùng ký ức của hai ta.</p>
+    <h1 class="intro-title">Cho Em — 20/10 cả một bầu trời sao ✨</h1>
+    <p class="intro-sub">Nhấn "Bắt đầu" để mở nhạc và bước vào vùng ký ức của hai ta.</p>
     <button id="btnEnter" class="pill bounce">▶️ Bắt đầu</button>
   </div>
 </div>
@@ -575,33 +575,6 @@ function buildVideoWall(){
 
   wrap.style.opacity = "1";
 }
-
-/* ===== Countdown (IDs ở intro) ===== */
-(function setupCountdown(){
-  const dd = $("#dd"), hh = $("#hh"), mm = $("#mm"), ss = $("#ss");
-  function next2010(now = new Date()){
-    const y = now.getFullYear();
-    const targetThisYear = new Date(y, 9, 20, 0, 0, 0);
-    return (now <= targetThisYear) ? targetThisYear : new Date(y+1, 9, 20, 0, 0, 0);
-  }
-  function tick(){
-    const now = new Date(); const tgt = next2010(now); const diff = tgt - now;
-    if (diff <= 0){
-      const el = document.querySelector(".intro-countdown");
-      if (el) el.innerHTML = `<div class="icell"><div class="num">🎉</div><div class="lbl">Chúc mừng</div></div>`;
-      return;
-    }
-    const s = Math.floor(diff/1000);
-    const days = Math.floor(s/86400);
-    const hrs = Math.floor((s%86400)/3600);
-    const mins = Math.floor((s%3600)/60);
-    const secs = s%60;
-    dd.textContent = days; hh.textContent = String(hrs).padStart(2,"0");
-    mm.textContent = String(mins).padStart(2,"0"); ss.textContent = String(secs).padStart(2,"0");
-    requestAnimationFrame(()=>setTimeout(tick, 1000 - (Date.now()%1000)));
-  }
-  tick();
-})();
 
 /* ===== Typewriter ===== */
 const lines = [
